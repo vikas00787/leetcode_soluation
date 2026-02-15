@@ -1,0 +1,62 @@
+class Solution {
+
+    public void solveSudoku(char[][] board) {
+        solve(board);
+    }
+
+    // Backtracking function
+    private boolean solve(char[][] board) {
+
+        for (int i = 0; i < 9; i++) {
+
+            for (int j = 0; j < 9; j++) {
+
+                // If empty cell found
+                if (board[i][j] == '.') {
+
+                    // Try numbers 1 to 9
+                    for (char c = '1'; c <= '9'; c++) {
+
+                        if (isValid(board, i, j, c)) {
+
+                            board[i][j] = c;
+
+                            // Recurse
+                            if (solve(board)) {
+                                return true;
+                            }
+
+                            // Backtrack
+                            board[i][j] = '.';
+                        }
+                    }
+
+                    return false; // No valid number
+                }
+            }
+        }
+
+        return true; // Solved
+    }
+
+    // Check if placing c is valid
+    private boolean isValid(char[][] board, int row, int col, char c) {
+
+        for (int i = 0; i < 9; i++) {
+
+            // Row check
+            if (board[row][i] == c) return false;
+
+            // Column check
+            if (board[i][col] == c) return false;
+
+            // 3x3 box check
+            int r = 3 * (row / 3) + i / 3;
+            int d = 3 * (col / 3) + i % 3;
+
+            if (board[r][d] == c) return false;
+        }
+
+        return true;
+    }
+}
